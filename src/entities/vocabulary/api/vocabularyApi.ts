@@ -1,5 +1,5 @@
 import { apiFetch } from "../../../shared/api/client";
-import type { VocabularyMarker, VocabularyQuizQuestion } from "../model/types";
+import type { VocabularyItem, VocabularyMarker, VocabularyQuizQuestion } from "../model/types";
 
 async function readErrorMessage(response: Response, fallback: string) {
   const text = await response.text().catch(() => "");
@@ -30,4 +30,25 @@ export async function fetchVocabularyQuiz(
   }
 
   return (await response.json()) as VocabularyQuizQuestion[];
+}
+
+export async function fetchVocabularyWords(
+  apiUrl: string,
+  token: string,
+  options: { marker?: VocabularyMarker; keyword?: string } = {}
+) {
+  const params = new URLSearchParams();
+  if (options.marker) params.set("marker", options.marker);
+  if (options.keyword?.trim()) params.set("keyword", options.keyword.trim());
+
+  const suffix = params.toString();
+  const response = await apiFetch(`${apiUrl}/api/vocabulary-play/words${suffix ? `?${suffix}` : ""}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+
+  if (!response.ok) {
+    throw new Error(await readErrorMessage(response, `단어장을 불러오지 못했습니다 (HTTP ${response.status})`));
+  }
+
+  return (await response.json()) as VocabularyItem[];
 }

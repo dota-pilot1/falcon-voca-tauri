@@ -1,4 +1,5 @@
 import {
+  BookOpenText,
   GraduationCap,
   Settings,
   UserCircle,
@@ -6,7 +7,7 @@ import {
 } from "lucide-react";
 import type { UserSummary } from "../../entities/user/model/types";
 
-export type WebMenuId = "vocaQuiz" | "profile" | "settings";
+export type WebMenuId = "vocabulary" | "vocaQuiz" | "profile" | "settings";
 
 export type WebMenu = {
   id: WebMenuId;
@@ -17,6 +18,12 @@ export type WebMenu = {
 };
 
 export const WEB_HEADER_MENUS: WebMenu[] = [
+  {
+    id: "vocabulary",
+    label: "단어장",
+    subtitle: "기본 어휘 3000 · 검색",
+    icon: BookOpenText,
+  },
   {
     id: "vocaQuiz",
     label: "단어 퀴즈",

@@ -58,7 +58,7 @@ export function AppSidebar({
   return (
     <aside className="app-sidebar">
       <div className="sidebar-brand">
-        <button className="sidebar-brand-mark" onClick={() => onOpenMenu("vocaQuiz")} title="Falcon Voca">
+        <button className="sidebar-brand-mark" onClick={() => onOpenMenu("vocabulary")} title="Falcon Voca">
           <GraduationCap size={19} />
         </button>
       </div>

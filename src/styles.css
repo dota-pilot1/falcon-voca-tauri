@@ -1656,6 +1656,269 @@ button:disabled {
   font-size: 14px;
 }
 
+.vocabulary-workspace {
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr);
+  height: 100%;
+  padding-bottom: 20px;
+}
+
+.vocabulary-toolbar {
+  display: grid;
+  grid-template-columns: minmax(300px, 420px) 180px;
+  gap: 10px;
+  align-items: center;
+}
+
+.vocabulary-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  min-width: 0;
+  padding: 0 12px;
+  border: 1px solid #dce1e7;
+  border-radius: 8px;
+  color: #71717a;
+  background: #ffffff;
+}
+
+.vocabulary-search:focus-within {
+  border-color: #059669;
+  box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.12);
+}
+
+.vocabulary-search input {
+  min-width: 0;
+  flex: 1;
+  border: 0;
+  outline: none;
+  color: #18181b;
+  background: transparent;
+  font-size: 14px;
+  font-weight: 750;
+}
+
+.vocabulary-summary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  padding: 16px 0;
+}
+
+.vocabulary-summary-card {
+  display: grid;
+  gap: 4px;
+  min-height: 66px;
+  padding: 12px 14px;
+  border: 1px solid #e0e2e6;
+  border-radius: 9px;
+  background: #ffffff;
+}
+
+.vocabulary-summary-card span {
+  color: #71717a;
+  font-size: 12px;
+  font-weight: 850;
+}
+
+.vocabulary-summary-card strong {
+  color: #18181b;
+  font-size: 20px;
+  line-height: 26px;
+}
+
+.vocabulary-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 380px;
+  gap: 14px;
+  min-height: 0;
+}
+
+.vocabulary-list {
+  min-height: 0;
+  overflow: auto;
+  border: 1px solid #e0e2e6;
+  border-radius: 10px;
+  background: #ffffff;
+}
+
+.vocabulary-list button {
+  display: grid;
+  grid-template-columns: 58px minmax(0, 1fr) 112px;
+  gap: 12px;
+  align-items: center;
+  width: 100%;
+  min-height: 66px;
+  padding: 10px 14px;
+  border-bottom: 1px solid #eef0f3;
+  color: #18181b;
+  text-align: left;
+  background: #ffffff;
+}
+
+.vocabulary-list button:hover {
+  background: #f8fafc;
+}
+
+.vocabulary-list button.active {
+  background: #ecfdf5;
+  box-shadow: inset 3px 0 0 #059669;
+}
+
+.word-rank {
+  color: #94a3b8;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.word-main {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+.word-main strong {
+  overflow: hidden;
+  color: #0f172a;
+  font-size: 16px;
+  line-height: 22px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.word-main span {
+  overflow: hidden;
+  color: #64748b;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 18px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.word-marker {
+  justify-self: end;
+  min-width: 0;
+  max-width: 112px;
+  overflow: hidden;
+  padding: 5px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 900;
+  line-height: 14px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.word-marker.emerald {
+  color: #047857;
+  background: #d1fae5;
+}
+
+.word-marker.sky {
+  color: #0369a1;
+  background: #e0f2fe;
+}
+
+.word-marker.violet {
+  color: #6d28d9;
+  background: #ede9fe;
+}
+
+.vocabulary-detail {
+  min-height: 0;
+  overflow: auto;
+  border: 1px solid #e0e2e6;
+  border-radius: 10px;
+  background: #ffffff;
+  padding: 18px;
+}
+
+.vocabulary-detail-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.vocabulary-detail-head .word-marker {
+  justify-self: auto;
+}
+
+.vocabulary-detail-head strong {
+  color: #94a3b8;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.vocabulary-detail h2 {
+  margin: 18px 0 6px;
+  color: #0f172a;
+  font-size: 34px;
+  line-height: 42px;
+}
+
+.vocabulary-alt {
+  margin: 0 0 16px;
+  color: #64748b;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.vocabulary-definition {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+}
+
+.vocabulary-definition div {
+  display: grid;
+  gap: 6px;
+  padding-top: 12px;
+  border-top: 1px solid #eef0f3;
+}
+
+.vocabulary-definition dt {
+  color: #94a3b8;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.vocabulary-definition dd {
+  margin: 0;
+  color: #18181b;
+  font-size: 15px;
+  font-weight: 760;
+  line-height: 23px;
+}
+
+.vocabulary-state,
+.vocabulary-empty {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 92px;
+  padding: 18px;
+  border: 1px solid #e0e2e6;
+  border-radius: 10px;
+  color: #64748b;
+  background: #ffffff;
+  font-size: 14px;
+  font-weight: 850;
+}
+
+.vocabulary-empty {
+  justify-content: center;
+  height: 100%;
+  border: 0;
+  color: #94a3b8;
+}
+
+.vocabulary-empty.detail {
+  border: 1px dashed #dce1e7;
+}
+
 .material-actions {
   display: flex;
   align-items: center;

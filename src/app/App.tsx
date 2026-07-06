@@ -7,16 +7,17 @@ import { useAuthSession } from "../features/auth/model/useAuthSession";
 import { defaultApiUrl, unauthorizedEventName } from "../shared/api/client";
 import { AppSidebar } from "../widgets/app-shell/ui/AppSidebar";
 import { AppTopbar } from "../widgets/app-shell/ui/AppTopbar";
+import { VocabularyListView } from "../pages/vocabulary-list/ui/VocabularyListView";
 import { VocabularyQuizView } from "../pages/vocabulary-quiz/ui/VocabularyQuizView";
 
-const appVersion = "0.1.15";
+const appVersion = "0.1.16";
 
 type ConnectionStatus = "checking" | "online" | "offline";
 
 export function App() {
   const apiUrl = defaultApiUrl;
   const { token, user, setToken, setRefreshToken, setUser } = useAuthSession();
-  const [activeMenu, setActiveMenu] = useState<WebMenuId>("vocaQuiz");
+  const [activeMenu, setActiveMenu] = useState<WebMenuId>("vocabulary");
   const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>("checking");
   const isLoggedIn = token.trim().length > 0 && user !== null;
   const activeWebMenu = useMemo(
@@ -30,7 +31,7 @@ export function App() {
       setToken("");
       setRefreshToken("");
       setUser(null);
-      setActiveMenu("vocaQuiz");
+      setActiveMenu("vocabulary");
     };
     window.addEventListener(unauthorizedEventName, clearExpiredSession);
     return () => window.removeEventListener(unauthorizedEventName, clearExpiredSession);
@@ -56,7 +57,7 @@ export function App() {
     setToken(data.accessToken);
     setRefreshToken(data.refreshToken);
     setUser(data.user);
-    setActiveMenu("vocaQuiz");
+    setActiveMenu("vocabulary");
   };
 
   const handleSignup = async (email: string, username: string, password: string) => {
@@ -106,10 +107,11 @@ export function App() {
 }
 
 function FalconWorkspace({ activeMenu, userName, apiUrl, token }: { activeMenu: WebMenuId; userName: string; apiUrl: string; token: string }) {
+  if (activeMenu === "vocabulary") return <VocabularyListView apiUrl={apiUrl} token={token} />;
   if (activeMenu === "vocaQuiz") return <VocabularyQuizView apiUrl={apiUrl} token={token} />;
   if (activeMenu === "profile") return <ProfileView userName={userName} />;
   if (activeMenu === "settings") return <SettingsView />;
-  return <VocabularyQuizView apiUrl={apiUrl} token={token} />;
+  return <VocabularyListView apiUrl={apiUrl} token={token} />;
 }
 
 function ProfileView({ userName }: { userName: string }) {
@@ -117,7 +119,7 @@ function ProfileView({ userName }: { userName: string }) {
     <SimpleGridView
       title="프로필"
       description={`${userName} 계정으로 Falcon Voca에 로그인되어 있습니다.`}
-      items={["학습 서버 연결", "계정 정보", "앱 버전 v0.1.15"]}
+      items={["학습 서버 연결", "계정 정보", "앱 버전 v0.1.16"]}
     />
   );
 }

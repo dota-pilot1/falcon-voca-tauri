@@ -28,7 +28,7 @@ type LoginScreenProps = {
 const PASSWORD_PATTERN = /^(?=.*[A-Za-z])(?=.*\d).{8,100}$/;
 const REMEMBER_EMAIL_KEY = "falcon:login-email";
 const REMEMBER_PASSWORD_KEY = "falcon:login-password";
-const FALLBACK_APP_VERSION = "0.1.15";
+const FALLBACK_APP_VERSION = "0.1.16";
 const LOGIN_UPDATE_CHECK_INTERVAL_MS = 10 * 60 * 1000;
 
 export function LoginScreen({ onLogin, onSignup }: LoginScreenProps) {

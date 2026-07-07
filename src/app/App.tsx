@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { CheckCircle2, CircleAlert } from "lucide-react";
 import { WEB_HEADER_MENUS, PROFILE_MENU, canAccessMenu, type WebMenu, type WebMenuId } from "./model/navigation";
 import { LoginScreen } from "../features/auth/login/LoginScreen";
@@ -9,16 +9,20 @@ import { AppSidebar } from "../widgets/app-shell/ui/AppSidebar";
 import { AppTopbar } from "../widgets/app-shell/ui/AppTopbar";
 import { VocabularyListView } from "../pages/vocabulary-list/ui/VocabularyListView";
 import { VocabularyQuizView } from "../pages/vocabulary-quiz/ui/VocabularyQuizView";
+import { useAppUpdate } from "../shared/lib/useAppUpdate";
+import { AppUpdatePanel } from "../shared/ui/AppUpdatePanel";
 
 const appVersion = "0.1.16";
 
 type ConnectionStatus = "checking" | "online" | "offline";
+type AppUpdateControls = ReturnType<typeof useAppUpdate>;
 
 export function App() {
   const apiUrl = defaultApiUrl;
   const { token, user, setToken, setRefreshToken, setUser } = useAuthSession();
   const [activeMenu, setActiveMenu] = useState<WebMenuId>("vocabulary");
   const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>("checking");
+  const appUpdate = useAppUpdate(appVersion);
   const isLoggedIn = token.trim().length > 0 && user !== null;
   const activeWebMenu = useMemo(
     () => [...WEB_HEADER_MENUS, PROFILE_MENU].find((menu) => menu.id === activeMenu) ?? WEB_HEADER_MENUS[0],
@@ -51,6 +55,10 @@ export function App() {
       cancelled = true;
     };
   }, [apiUrl]);
+
+  useEffect(() => {
+    if (isLoggedIn) appUpdate.checkOnceOnStartup();
+  }, [appUpdate.checkOnceOnStartup, isLoggedIn]);
 
   const handleLogin = async (email: string, password: string) => {
     const data = await login(apiUrl, email, password);
@@ -89,15 +97,18 @@ export function App() {
         activeWebMenu={activeWebMenu}
         user={user}
         connectionStatus={connectionStatus}
-        appVersion={appVersion}
+        appVersion={appUpdate.state.currentVersion}
+        updateState={appUpdate.state}
+        updateBusy={appUpdate.busy}
         onOpenMenu={openMenu}
+        onInstallUpdate={() => void appUpdate.installUpdate()}
         onLogout={() => void handleLogout()}
       />
 
       <div className="app-content">
         <AppTopbar activeMenu={activeMenu} activeWebMenu={activeWebMenu} />
         {canAccessActiveMenu ? (
-          <FalconWorkspace activeMenu={activeMenu} userName={user.username || user.email} apiUrl={apiUrl} token={token} />
+          <FalconWorkspace activeMenu={activeMenu} userName={user.username || user.email} apiUrl={apiUrl} token={token} appUpdate={appUpdate} />
         ) : (
           <ForbiddenView menu={activeWebMenu} />
         )}
@@ -106,21 +117,28 @@ export function App() {
   );
 }
 
-function FalconWorkspace({ activeMenu, userName, apiUrl, token }: { activeMenu: WebMenuId; userName: string; apiUrl: string; token: string }) {
+function FalconWorkspace({ activeMenu, userName, apiUrl, token, appUpdate }: { activeMenu: WebMenuId; userName: string; apiUrl: string; token: string; appUpdate: AppUpdateControls }) {
   if (activeMenu === "vocabulary") return <VocabularyListView apiUrl={apiUrl} token={token} />;
   if (activeMenu === "vocaQuiz") return <VocabularyQuizView apiUrl={apiUrl} token={token} />;
-  if (activeMenu === "profile") return <ProfileView userName={userName} />;
+  if (activeMenu === "profile") return <ProfileView userName={userName} appUpdate={appUpdate} />;
   if (activeMenu === "settings") return <SettingsView />;
   return <VocabularyListView apiUrl={apiUrl} token={token} />;
 }
 
-function ProfileView({ userName }: { userName: string }) {
+function ProfileView({ userName, appUpdate }: { userName: string; appUpdate: AppUpdateControls }) {
   return (
     <SimpleGridView
       title="프로필"
       description={`${userName} 계정으로 Falcon Voca에 로그인되어 있습니다.`}
-      items={["학습 서버 연결", "계정 정보", "앱 버전 v0.1.16"]}
-    />
+      items={["학습 서버 연결", "계정 정보", `앱 버전 v${appUpdate.state.currentVersion}`]}
+    >
+      <AppUpdatePanel
+        updateState={appUpdate.state}
+        busy={appUpdate.busy}
+        onCheckUpdate={() => void appUpdate.checkForUpdate()}
+        onInstallUpdate={() => void appUpdate.installUpdate()}
+      />
+    </SimpleGridView>
   );
 }
 
@@ -134,7 +152,7 @@ function SettingsView() {
   );
 }
 
-function SimpleGridView({ title, description, items }: { title: string; description: string; items: string[] }) {
+function SimpleGridView({ title, description, items, children }: { title: string; description: string; items: string[]; children?: ReactNode }) {
   return (
     <section className="falcon-view">
       <div className="falcon-inner">
@@ -152,6 +170,7 @@ function SimpleGridView({ title, description, items }: { title: string; descript
             </article>
           ))}
         </div>
+        {children}
       </div>
     </section>
   );

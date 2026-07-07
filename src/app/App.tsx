@@ -12,7 +12,7 @@ import { VocabularyQuizView } from "../pages/vocabulary-quiz/ui/VocabularyQuizVi
 import { useAppUpdate } from "../shared/lib/useAppUpdate";
 import { AppUpdatePanel } from "../shared/ui/AppUpdatePanel";
 
-const appVersion = "0.1.16";
+const appVersion = "0.1.17";
 
 type ConnectionStatus = "checking" | "online" | "offline";
 type AppUpdateControls = ReturnType<typeof useAppUpdate>;

@@ -1,6 +1,6 @@
 [package]
 name = "falcon-voca-tauri"
-version = "0.1.17"
+version = "0.1.18"
 description = "Falcon Voca desktop app"
 authors = ["Falcon Voca"]
 edition = "2021"

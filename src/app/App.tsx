@@ -57,7 +57,11 @@ export function App() {
   }, [apiUrl]);
 
   useEffect(() => {
-    if (isLoggedIn) appUpdate.checkOnceOnStartup();
+    if (!isLoggedIn) return;
+    const timer = window.setTimeout(() => {
+      appUpdate.checkOnceOnStartup();
+    }, 10_000);
+    return () => window.clearTimeout(timer);
   }, [appUpdate.checkOnceOnStartup, isLoggedIn]);
 
   const handleLogin = async (email: string, password: string) => {
